@@ -123,6 +123,13 @@ handles three things:
    404 today, so any inbound link or bookmark currently lands on an error.
 3. **SPA fallback** so client-side routes resolve on refresh.
 
+`vercel.json` does the same three jobs on Vercel, where `.htaccess` has no
+effect: the legacy 301s, an SPA rewrite so deep links survive a refresh, and the
+security and caching headers. Each legacy path is listed in both the casing the
+old site used and lowercase, because Vercel matches `source` case-sensitively.
+Note that Vercel rejects any key it does not recognise — there is no comment
+field, so this paragraph is the documentation for that file.
+
 The same redirects exist client-side in `App.tsx` as a backstop.
 
 Update the domain in `public/sitemap.xml`, `public/robots.txt` and the canonical
