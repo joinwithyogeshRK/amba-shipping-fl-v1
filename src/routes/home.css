@@ -1,0 +1,358 @@
+/* ===========================================================================
+   Homepage
+
+   The sections inside .scene-zone sit over the fixed WebGL canvas, so each text
+   block carries its own scrim. Everything after the zone has a solid ground.
+   Spacing is set on explicit block classes rather than on element selectors, so
+   nothing here can cancel out the shared .section rule.
+   =========================================================================== */
+
+.scene-zone {
+  position: relative;
+  z-index: 1;
+  color: var(--ink-invert);
+}
+
+/* --- hero ---------------------------------------------------------------- */
+.hero {
+  position: relative;
+  /* The scrims intentionally bleed past the viewport edge; clip here so that
+     bleed can never create a horizontal scrollbar. */
+  overflow: clip;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: 7rem 5rem;
+}
+
+.hero__inner { width: 100%; }
+
+/* The scrim is what guarantees contrast over a moving scene. It is a flat
+   panel rather than a blur: blur over a 3D canvas is expensive every frame.
+   It bleeds past the left viewport edge and fades out well beyond the text so
+   neither side shows a hard vertical seam against the water. */
+.hero__scrim {
+  position: relative;
+  max-width: 46rem;
+  padding: var(--space-4) var(--space-4) var(--space-4) 0;
+}
+.hero__scrim::before {
+  content: '';
+  position: absolute;
+  inset-block: calc(var(--space-5) * -1);
+  inset-inline: -100vw -16rem;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 26, 43, 0.92) 0%,
+    rgba(7, 26, 43, 0.92) 62%,
+    rgba(7, 26, 43, 0.86) 74%,
+    rgba(7, 26, 43, 0) 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero__headline {
+  font-size: var(--t-display);
+  line-height: 0.98;
+  letter-spacing: -0.028em;
+  margin-bottom: var(--space-3);
+}
+
+.hero__sub {
+  font-size: var(--t-lead);
+  color: var(--ink-invert-soft);
+  max-width: 40ch;
+  margin-bottom: var(--space-4);
+}
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.hero__disclosure {
+  margin: var(--space-3) 0 0;
+  max-width: 52ch;
+  font-size: var(--t-fine);
+  line-height: 1.5;
+  color: rgba(231, 235, 238, 0.66);
+}
+
+/* No canvas, no vessel, no caption. */
+:root[data-scene='fallback'] .hero__disclosure { display: none; }
+
+/* --- bands over the canvas ------------------------------------------------ */
+.band { position: relative; padding-block: var(--space-7); overflow: clip; }
+
+/* Band copy is held to a measured column so the scrim can sit solidly behind
+   every line of it and still leave the right of the frame open for the vessel.
+   The fade happens entirely past the text, never under it. */
+.band__scrim {
+  position: relative;
+  max-width: 56rem;
+}
+.band__scrim--wide { max-width: 64rem; }
+
+.band__scrim::before {
+  content: '';
+  position: absolute;
+  /* Generous vertical bleed so consecutive bands' scrims nearly meet. */
+  inset-block: calc(var(--space-6) * -1);
+  /* left: off-screen. right: a 9rem fade that begins at the column edge. */
+  inset-inline: -100vw -9rem;
+  background: linear-gradient(
+    to right,
+    rgba(7, 26, 43, 0.93) 0%,
+    rgba(7, 26, 43, 0.93) calc(100% - 9rem),
+    rgba(7, 26, 43, 0) 100%
+  );
+  /* Feather the top and bottom edges. Without this each band's scrim ends in a
+     hard horizontal line across the water, and the gaps between bands read as
+     stripes rather than as one continuous treatment. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.band__lede {
+  font-size: var(--t-lead);
+  color: var(--ink-invert-soft);
+  max-width: var(--measure-tight);
+  margin-top: var(--space-2);
+}
+
+.band__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+.band__cols p { color: var(--ink-invert-soft); }
+
+.band__sub {
+  font-family: var(--face-text);
+  font-size: var(--t-base);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+/* --- ruled list (replaces the card grid) ---------------------------------- */
+.ruled-list { margin: var(--space-4) 0; border-top: 1px solid var(--rule-dark); }
+
+.ruled-list__item {
+  display: grid;
+  grid-template-columns: 17rem minmax(0, 1fr);
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid var(--rule-dark);
+}
+
+.ruled-list__name {
+  font-family: var(--face-text);
+  font-size: var(--t-base);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.ruled-list__text { margin: 0; color: var(--ink-invert-soft); }
+.ruled-list__text--pending { color: #7e93a5; font-style: italic; }
+
+.ruled-list--light { border-top-color: var(--rule); }
+.ruled-list--light .ruled-list__item { border-bottom-color: var(--rule); }
+.ruled-list--light .ruled-list__text { color: var(--ink-soft); }
+.ruled-list--light .ruled-list__text--pending { color: #6d7f90; }
+
+/* --- fleet register -------------------------------------------------------- */
+/* One extra viewport of travel, held by a sticky child. No pin, no spacer. */
+.fleet {
+  min-height: 200svh;
+  padding-block: 0;
+  overflow: visible; /* sticky must not be clipped by the .band rule */
+}
+
+.fleet__hold {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--space-6);
+}
+
+.register {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-4);
+  text-align: left;
+}
+
+.register__caption {
+  caption-side: top;
+  text-align: left;
+  color: var(--ink-invert-soft);
+  font-size: var(--t-small);
+  padding-bottom: var(--space-2);
+  max-width: var(--measure);
+}
+
+.register thead th {
+  font-family: var(--face-text);
+  font-size: var(--t-fine);
+  font-weight: 500;
+  color: #7e93a5;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--rule-dark);
+}
+
+.register tbody th {
+  font-family: var(--face-text);
+  font-size: var(--t-base);
+  font-weight: 400;
+  color: var(--ink-invert);
+  padding-block: 0.85rem;
+  padding-right: var(--space-3);
+  border-bottom: 1px solid var(--rule-dark);
+  transition: color 0.3s var(--ease-out);
+}
+
+.register tbody tr.is-active th { color: #fff; }
+
+.register__count-head { width: 16rem; text-align: left; }
+
+.register__count {
+  position: relative;
+  width: 16rem;
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--rule-dark);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.register__bar {
+  display: block;
+  height: 3px;
+  max-inline-size: 11rem;
+  background: var(--rule-dark);
+  transition: background-color 0.3s var(--ease-out);
+}
+.register tbody tr.is-active .register__bar { background: var(--teal-bright); }
+
+.register__figure { color: var(--ink-invert); min-inline-size: 2ch; }
+
+.register__flag {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid #6d8294;
+  color: #9daebd;
+  font-size: var(--t-fine);
+  vertical-align: middle;
+}
+
+.register tfoot th,
+.register tfoot td {
+  padding-top: 0.9rem;
+  font-family: var(--face-text);
+  font-weight: 600;
+  color: var(--ink-invert);
+  border-bottom: 0;
+}
+
+.register__note {
+  margin-top: var(--space-3);
+  color: #7e93a5;
+  font-size: var(--t-small);
+  max-width: var(--measure);
+}
+
+/* --- road logistics -------------------------------------------------------- */
+.road { position: relative; z-index: 1; background: var(--mist); }
+.road__head { max-width: var(--measure); }
+.road__lede { font-size: var(--t-lead); color: var(--ink-soft); margin-top: var(--space-2); }
+
+.road__route { width: 100%; height: auto; margin-block: var(--space-5) var(--space-2); }
+.road__route-label {
+  font-family: var(--face-text);
+  font-size: 13px;
+  fill: var(--ink-soft);
+}
+
+/* --- strengths ------------------------------------------------------------- */
+.strengths { position: relative; z-index: 1; background: var(--mist-raised); }
+
+.strengths__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.strengths__item { border-top: 1px solid var(--rule); padding-top: var(--space-2); }
+.strengths__item p { color: var(--ink-soft); margin-bottom: 0; }
+
+.strengths__title {
+  font-family: var(--face-display);
+  font-size: var(--t-h4);
+  font-weight: 450;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+/* --- narrow screens --------------------------------------------------------
+   The pinned sequence is already disabled in JS below 60rem; here the layout
+   collapses to a single column and the scrims go full-width so text never sits
+   on bare canvas. */
+@media (max-width: 60rem) {
+  .band__scrim, .band__scrim--wide { max-width: none; }
+  .band__cols,
+  .strengths__grid { grid-template-columns: minmax(0, 1fr); }
+
+  .ruled-list__item { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
+
+  .fleet { min-height: 0; padding-block: var(--space-7); }
+  .fleet__hold { position: static; min-height: 0; display: block; padding-block: 0; }
+
+  /* The hero is a flex row on desktop so the copy can sit beside the open
+     water. On narrow screens there is no room beside anything — stack, or the
+     disclosure line becomes a second column squeezed against the right edge. */
+  .hero {
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding-block: 6.5rem var(--space-4);
+  }
+
+  .hero__scrim {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  /* No sideways fade at this width: the copy spans the full column, so the
+     scrim has to as well. */
+  .hero__scrim::before,
+  .band__scrim::before {
+    inset-inline: -100vw;
+    background: rgba(7, 26, 43, 0.88);
+  }
+
+  .hero__disclosure { max-width: none; }
+
+  .register__count-head, .register__count { width: 9rem; }
+  .register__bar { max-inline-size: 5rem; }
+}
+
+@media (max-width: 40rem) {
+  .register__flag { display: block; margin: 0.3rem 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No held sequence: the register is simply a section like any other. */
+  .fleet { min-height: 0; padding-block: var(--space-7); }
+  .fleet__hold { position: static; min-height: 0; display: block; padding-block: 0; }
+}

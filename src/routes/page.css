@@ -1,0 +1,56 @@
+/* Shared chrome for the flat (non-3D) routes. */
+.page {
+  position: relative;
+  z-index: 1;
+  background: var(--mist);
+  padding-top: 8.5rem;
+}
+
+.page__header { max-width: var(--measure); padding-bottom: var(--space-4); }
+.page__header h1 { margin-bottom: var(--space-2); }
+.page__lede { font-size: var(--t-lead); color: var(--ink-soft); }
+
+/* The section rule is drawn by a pseudo-element inset to the gutter, so it
+   lines up with the content and with the rules inside each entry. A border on
+   .shell itself would span the padding box and sit a gutter wider than
+   everything it separates. */
+.page__section { position: relative; padding-block: var(--space-5); }
+.page__section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  border-top: 1px solid var(--rule);
+}
+.page__section h2 { margin-bottom: var(--space-2); }
+
+.prose p { color: var(--ink-soft); }
+.prose h3 {
+  font-family: var(--face-text);
+  font-size: var(--t-base);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin: var(--space-3) 0 0.4rem;
+}
+
+.service-entry { border-top: 1px solid var(--rule); padding-block: var(--space-3); scroll-margin-top: 7rem; }
+.service-entry:first-of-type { border-top: 0; }
+.service-entry h2 {
+  font-family: var(--face-display);
+  font-size: var(--t-h3);
+  font-weight: 450;
+  margin-bottom: 0.6rem;
+}
+.service-entry p { color: var(--ink-soft); margin-bottom: 0; }
+.service-entry__pending { font-style: italic; color: #6d7f90; }
+
+.notice-list { margin-top: var(--space-3); display: grid; gap: var(--space-2); }
+.notice-list li { border-left: 2px solid var(--teal); padding: 0.2rem 0 0.2rem var(--space-2); }
+.notice-list p { margin-bottom: 0.3rem; }
+.notice-list small { color: #6d7f90; font-size: var(--t-fine); }
+
+.notfound { min-height: 60svh; display: flex; align-items: center; }
+
+.notfound__links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-3); }

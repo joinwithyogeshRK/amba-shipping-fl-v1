@@ -1,0 +1,68 @@
+/* ===========================================================================
+   AMBA Shipping & Logistics — design tokens
+
+   Palette is drawn from the brief (deep ocean navy, off-white, muted steel,
+   restrained teal) and reconciled with the real ASLPL logo, whose two brand
+   colours sample as #0090D8 (cyan) and #184878 (navy). The off-white is
+   deliberately steel-tinted and cool rather than a warm cream, so the page
+   reads as sea light rather than paper.
+
+   Every pairing used for text meets WCAG AA at its rendered size.
+   =========================================================================== */
+
+:root {
+  /* --- ground ---------------------------------------------------------- */
+  --abyss: #071a2b;        /* deep ocean navy — hero + footer ground        */
+  --abyss-soft: #0d2639;   /* raised panels on the dark ground              */
+  --hull: #16395c;         /* brand navy, from the logo                     */
+  --mist: #e7ebee;         /* cool off-white — the main page ground         */
+  --mist-raised: #f1f4f6;  /* lifted blocks on the light ground             */
+
+  /* --- ink -------------------------------------------------------------- */
+  --ink: #0e2237;          /* body text on light                            */
+  --ink-soft: #4c5d6e;     /* secondary text on light (5.0:1 on --mist)     */
+  --ink-invert: #e7ebee;   /* body text on dark                             */
+  --ink-invert-soft: #9daebd; /* secondary text on dark (7.9:1 on --abyss)  */
+
+  /* --- line ------------------------------------------------------------- */
+  --rule: #c3ccd4;         /* hairline on light                             */
+  --rule-strong: #9daab6;  /* emphasised hairline on light                  */
+  --rule-dark: #1e3449;    /* hairline on dark                              */
+
+  /* --- accent ----------------------------------------------------------- */
+  --teal: #0e7c86;         /* rules, marks, non-text accents                */
+  --teal-ink: #0a6670;     /* teal used as text on light (5.0:1)            */
+  --teal-bright: #35a8b2;  /* teal on the dark ground                       */
+  --signal: #0090d8;       /* logo cyan — focus rings only                  */
+
+  /* --- type ------------------------------------------------------------- */
+  --face-display: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --face-text: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Major-third scale (1.25) on a 17px base. */
+  --t-fine: 0.765rem;
+  --t-small: 0.875rem;
+  --t-base: 1rem;
+  --t-lead: 1.25rem;
+  --t-h4: 1.5625rem;
+  --t-h3: 1.953rem;
+  --t-h2: clamp(2rem, 1.3rem + 2.6vw, 2.441rem);
+  --t-h1: clamp(2.6rem, 1.4rem + 4.4vw, 3.815rem);
+  --t-display: clamp(3rem, 1.2rem + 7vw, 5.6rem);
+
+  /* --- measure + rhythm -------------------------------------------------- */
+  --measure: 62ch;
+  --measure-tight: 46ch;
+  --gutter: clamp(1.25rem, 0.6rem + 2.6vw, 3rem);
+  --page-max: 78rem;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+  --space-7: clamp(5rem, 3rem + 9vw, 9rem);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

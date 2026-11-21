@@ -1,0 +1,112 @@
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  /* A thin rule, not a shadow — the brief's navigation treatment. */
+  border-bottom: 1px solid rgba(231, 235, 238, 0.16);
+  /* Content scrolls under the transparent bar, so the veil has to stay strong
+     across the full bar height and only release below it. */
+  background: linear-gradient(
+    180deg,
+    rgba(7, 26, 43, 0.97) 0%,
+    rgba(7, 26, 43, 0.93) 62%,
+    rgba(7, 26, 43, 0.72) 86%,
+    rgba(7, 26, 43, 0) 100%
+  );
+  transition: background-color 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
+}
+
+.nav--solid {
+  background: var(--mist);
+  border-bottom-color: var(--rule);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 4.5rem;
+}
+
+.nav__brand { display: inline-flex; align-items: center; flex: 0 0 auto; }
+.nav__brand img {
+  width: 120px;
+  height: auto;
+  /* The source logo ships as artwork on a flat white plate. That plate is
+     knocked out to transparency in /brand/aslpl-logo-knockout.png so the mark
+     sits in the dark hero instead of punching a white rectangle through it. */
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2.25rem);
+}
+
+.nav__link {
+  display: inline-block;
+  padding-block: 0.4rem;
+  color: var(--ink-invert);
+  text-decoration: none;
+  font-size: var(--t-small);
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid transparent;
+}
+.nav__link:hover,
+.nav__link.is-current {
+  color: #fff;
+  border-bottom-color: var(--teal-bright);
+}
+.nav--solid .nav__link { color: var(--ink-soft); }
+.nav--solid .nav__link:hover,
+.nav--solid .nav__link.is-current { color: var(--ink); border-bottom-color: var(--teal); }
+
+.nav__phone {
+  color: var(--ink-invert);
+  text-decoration: none;
+  font-size: var(--t-small);
+  white-space: nowrap;
+}
+.nav--solid .nav__phone { color: var(--ink); }
+
+.nav__panel { display: contents; }
+
+.nav__toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid currentColor;
+  color: var(--ink-invert);
+  /* Keeps the toggle at a 44px minimum tap target. */
+  padding: 0.65rem 1rem;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: var(--t-small);
+}
+.nav--solid .nav__toggle { color: var(--ink); }
+
+@media (max-width: 54rem) {
+  .nav__toggle { display: inline-block; }
+
+  .nav__panel {
+    display: block;
+    position: absolute;
+    inset: 100% 0 auto 0;
+    background: var(--abyss);
+    border-bottom: 1px solid var(--rule-dark);
+    padding: var(--space-2) var(--gutter) var(--space-3);
+    /* Collapsed, and removed from the tab order while collapsed. */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out), visibility 0.25s;
+  }
+  .nav--open .nav__panel { visibility: visible; opacity: 1; transform: none; }
+
+  .nav__list { flex-direction: column; align-items: flex-start; gap: 0; }
+  .nav__list li { width: 100%; border-bottom: 1px solid var(--rule-dark); }
+  .nav__link { display: block; width: 100%; padding-block: 0.85rem; color: var(--ink-invert); font-size: var(--t-lead); }
+  .nav--solid .nav__link { color: var(--ink-invert); }
+  .nav__phone { display: inline-block; margin-top: var(--space-2); color: var(--ink-invert); }
+  .nav--solid .nav__phone { color: var(--ink-invert); }
+}

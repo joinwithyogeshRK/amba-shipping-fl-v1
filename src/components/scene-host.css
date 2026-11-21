@@ -1,0 +1,38 @@
+/* The canvas is fixed behind the document. It never occupies layout space, so
+   mounting it cannot shift anything, and no space needs reserving in flow. */
+.scene-host {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--abyss);
+  pointer-events: none;
+  contain: strict;
+}
+
+.scene-host__layer { position: absolute; inset: 0; }
+.scene-host canvas { display: block; }
+
+/* --- static fallback ----------------------------------------------------- */
+.scene-fallback { position: absolute; inset: 0; overflow: hidden; }
+
+.scene-fallback__sky {
+  position: absolute;
+  inset: 0 0 42% 0;
+  background: linear-gradient(180deg, #071a2b 0%, #0d3148 62%, #1b5771 100%);
+}
+.scene-fallback__sun {
+  position: absolute;
+  left: 24%;
+  bottom: 40%;
+  width: clamp(5rem, 14vw, 11rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 238, 206, 0.9) 0%, rgba(95, 182, 191, 0.18) 58%, transparent 70%);
+}
+.scene-fallback__sea {
+  position: absolute;
+  inset: 58% 0 0 0;
+  background:
+    repeating-linear-gradient(180deg, rgba(231, 235, 238, 0.045) 0 1px, transparent 1px 7px),
+    linear-gradient(180deg, #13556a 0%, #0a2f45 46%, #06253c 100%);
+}
