@@ -31,16 +31,11 @@
 .enquiry__direct a { color: var(--teal-bright); }
 .enquiry__direct a:hover { color: #fff; }
 
-.enquiry__notice {
-  border-left: 2px solid var(--teal-bright);
-  padding: var(--space-2);
-  margin-bottom: var(--space-3);
-  background: var(--abyss-soft);
+.enquiry__hint {
+  margin: var(--space-2) 0 0;
   color: var(--ink-invert-soft);
   font-size: var(--t-small);
-  max-width: none;
 }
-.enquiry__notice code { color: var(--ink-invert); font-size: 0.95em; }
 
 .enquiry__form fieldset { border: 0; margin: 0; padding: 0; }
 .enquiry__form fieldset[disabled] { opacity: 0.55; }

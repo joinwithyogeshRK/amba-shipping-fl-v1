@@ -3,13 +3,17 @@ import { company } from '../content/site'
 import './enquiry.css'
 
 /**
- * The enquiry form is deliberately NOT a decorative one.
+ * The enquiry form always works, and never silently drops a message.
  *
- * The previous site shipped `<form action="#">`, which silently discarded every
- * message. Rather than repeat that, this form only becomes interactive once a
- * real endpoint is configured in VITE_ENQUIRY_ENDPOINT. Without one it states
- * plainly what is missing and points at the telephone and email addresses,
- * which are verified and work today.
+ * Two modes, and the visitor is told which one they are in:
+ *
+ * 1. With VITE_ENQUIRY_ENDPOINT set, the form POSTs straight to that backend.
+ * 2. Without it, submitting composes the enquiry into the visitor's own mail
+ *    client, addressed to the operations desk. No server needed, nothing
+ *    discarded, and the button says what will happen.
+ *
+ * What this deliberately never does is the thing the old site did: render a
+ * form that posts to "#" and throws the message away.
  */
 const ENDPOINT = import.meta.env.VITE_ENQUIRY_ENDPOINT as string | undefined
 
@@ -21,11 +25,35 @@ export function Enquiry() {
   const [error, setError] = useState('')
   const configured = Boolean(ENDPOINT)
 
+  function composeMailto(form: HTMLFormElement) {
+    const data = new FormData(form)
+    const name = String(data.get('name') ?? '')
+    const email = String(data.get('email') ?? '')
+    const subject = String(data.get('subject') ?? 'Website enquiry')
+    const message = String(data.get('message') ?? '')
+
+    const body = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Regarding: ${subject}`,
+      '',
+      message,
+    ].join('\n')
+
+    return `mailto:${company.emailOperations}?subject=${encodeURIComponent(
+      `Enquiry — ${subject}`,
+    )}&body=${encodeURIComponent(body)}`
+  }
+
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!ENDPOINT) return
-
     const form = event.currentTarget
+
+    if (!ENDPOINT) {
+      window.location.href = composeMailto(form)
+      return
+    }
+
     setStatus('sending')
     setError('')
 
@@ -82,16 +110,7 @@ export function Enquiry() {
         </div>
 
         <form className="enquiry__form reveal" onSubmit={onSubmit} noValidate={false}>
-          {!configured && (
-            <p className="enquiry__notice" role="note">
-              This form is not connected yet. It needs a submission endpoint in
-              <code> VITE_ENQUIRY_ENDPOINT</code> before it can send anything — until then it stays
-              disabled rather than quietly dropping messages. Please use the telephone number or
-              email addresses listed here.
-            </p>
-          )}
-
-          <fieldset disabled={!configured || status === 'sending'}>
+          <fieldset disabled={status === 'sending'}>
             <legend className="visually-hidden">Enquiry details</legend>
 
             <div className="field">
@@ -124,6 +143,10 @@ export function Enquiry() {
             <button type="submit" className="button button--primary">
               {status === 'sending' ? 'Sending' : 'Send enquiry'}
             </button>
+
+            {!configured && (
+              <p className="enquiry__hint">Opens in your email app, addressed to our operations desk.</p>
+            )}
           </fieldset>
 
           <p aria-live="polite" className="enquiry__status">

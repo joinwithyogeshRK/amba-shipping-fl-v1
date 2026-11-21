@@ -82,19 +82,25 @@ stripes across the water.
 
 ### The enquiry form
 
-**It is not connected.** There is no backend. The form renders disabled and says
-so, and points at the telephone and email addresses, which work today.
+The form always works and never drops a message, in one of two modes:
 
-To connect it, set an endpoint that accepts a `multipart/form-data` POST:
+- **No backend configured (current).** Submitting composes the enquiry into the
+  visitor's own mail client, addressed to `operation@ambashipping.com`. The form
+  says so in one line beneath the button.
+- **Backend configured.** It POSTs `multipart/form-data` directly and handles
+  the success and failure states.
+
+To switch to the second mode, set an endpoint:
 
 ```bash
 # .env.local
 VITE_ENQUIRY_ENDPOINT="https://..."
 ```
 
-The form posts `name`, `email`, `subject` and `message`, and handles the
-success and failure states. It was built this way on purpose: the old site's
-form posted to `#` and silently discarded every enquiry sent through it.
+Fields sent are `name`, `email`, `subject` and `message`.
+
+Either way, what it never does is the thing the old site did: render a form
+that posts to `#` and silently discards every enquiry sent through it.
 
 ### Replacing the vessel
 
