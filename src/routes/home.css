@@ -160,12 +160,10 @@
 }
 
 .ruled-list__text { margin: 0; color: var(--ink-invert-soft); }
-.ruled-list__text--pending { color: #7e93a5; font-style: italic; }
 
 .ruled-list--light { border-top-color: var(--rule); }
 .ruled-list--light .ruled-list__item { border-bottom-color: var(--rule); }
 .ruled-list--light .ruled-list__text { color: var(--ink-soft); }
-.ruled-list--light .ruled-list__text--pending { color: #6d7f90; }
 
 /* --- fleet register -------------------------------------------------------- */
 /* One extra viewport of travel, held by a sticky child. No pin, no spacer. */
@@ -356,3 +354,36 @@
   .fleet { min-height: 0; padding-block: var(--space-7); }
   .fleet__hold { position: static; min-height: 0; display: block; padding-block: 0; }
 }
+
+/* --- services named but not described ------------------------------------- */
+.also { margin-top: var(--space-5); }
+
+.also__title {
+  font-family: var(--face-text);
+  font-size: var(--t-base);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.also__note { color: var(--ink-invert-soft); max-width: var(--measure-tight); }
+
+.also__list {
+  margin-top: var(--space-3);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-4);
+  border-top: 1px solid var(--rule-dark);
+}
+.also__list li {
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--rule-dark);
+}
+
+@media (max-width: 40rem) {
+  .also__list { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Breathing room between the capability list and the call to action. */
+.also + .button { margin-top: var(--space-4); }

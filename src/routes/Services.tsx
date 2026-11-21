@@ -28,16 +28,22 @@ export default function Services() {
             <p>{service.summary}</p>
           </article>
         ))}
+      </div>
 
-        {pending.map((service) => (
-          <article key={service.slug} id={service.slug} className="service-entry reveal">
-            <h2>{service.name}</h2>
-            <p className="service-entry__pending">
-              This service is offered by the company, but no description has been published.
-              Copy is needed before this page can describe it properly.
-            </p>
-          </article>
-        ))}
+      {/* Named, not described — see the note in Home.tsx. */}
+      <div className="shell page__section">
+        <h2 className="reveal">Also provided</h2>
+        <p className="page__lede reveal">
+          Each of these is arranged to the client’s requirement rather than sold as a fixed
+          package. Our operations desk will set out scope and availability.
+        </p>
+        <ul className="also__list also__list--page reveal">
+          {pending.map((service) => (
+            <li key={service.slug} id={service.slug}>
+              {service.name}
+            </li>
+          ))}
+        </ul>
       </div>
 
       <Enquiry />

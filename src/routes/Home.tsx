@@ -86,19 +86,34 @@ function MarineServices() {
         <p className="band__lede reveal">{about.commitment}</p>
 
         <ul className="ruled-list">
-          {services.slice(0, 7).map((service) => (
-            <li key={service.slug} className="ruled-list__item reveal">
-              <h3 className="ruled-list__name">{service.name}</h3>
-              {service.summary ? (
+          {services
+            .filter((service) => service.summary)
+            .map((service) => (
+              <li key={service.slug} className="ruled-list__item reveal">
+                <h3 className="ruled-list__name">{service.name}</h3>
                 <p className="ruled-list__text">{service.summary}</p>
-              ) : (
-                <p className="ruled-list__text ruled-list__text--pending">
-                  Offered by the company. No published description yet.
-                </p>
-              )}
-            </li>
-          ))}
+              </li>
+            ))}
         </ul>
+
+        {/* Services the company lists but publishes no description for. Named
+            rather than described: the alternative is either inventing scope or
+            printing a row of "no description yet" placeholders. The framing
+            comes from the company's own line about tailor-made service. */}
+        <div className="also reveal">
+          <h3 className="also__title">Also provided</h3>
+          <p className="also__note">
+            Each of these is arranged to the client’s requirement rather than sold as a fixed
+            package. Our operations desk will set out scope and availability.
+          </p>
+          <ul className="also__list">
+            {services
+              .filter((service) => !service.summary)
+              .map((service) => (
+                <li key={service.slug}>{service.name}</li>
+              ))}
+          </ul>
+        </div>
 
         <Link className="button button--ghost" to="/services">
           See all services
@@ -191,8 +206,11 @@ function FleetRegister() {
                 <th scope="row">
                   {category.name}
                   {category.duplicateSuspect && (
-                    <span className="register__flag" title="Possible duplicate category in the source data">
-                      needs confirmation
+                    <span
+                      className="register__flag"
+                      title="These two categories may describe the same vessels"
+                    >
+                      possible duplicate
                     </span>
                   )}
                 </th>
